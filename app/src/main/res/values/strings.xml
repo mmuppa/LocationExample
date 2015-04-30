@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">LocationExample</string>
 
-    <string name="hello_world">Check the logcat!</string>
+    <string name="map_text">Click to see the points on a map</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_main">Maps</string>
 </resources>

@@ -1,6 +1,7 @@
 package edu.uw.tacoma.mmuppa.locationexample;
 
 import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -9,15 +10,31 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 
 public class LocationActivity extends ActionBarActivity {
+
+    private LocationLog mLocationLog;
+    private Button mButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location);
 
+        mLocationLog = new LocationLog();
+
+        mButton = (Button) findViewById(R.id.map_button);
+        mButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(v.getContext(), MapActivity.class);
+                i.putExtra("locations", mLocationLog);
+                startActivity(i);
+            }
+        });
         // Acquire a reference to the system Location Manager
         LocationManager locationManager = (LocationManager) this.getSystemService(
                 Context.LOCATION_SERVICE);
@@ -27,6 +44,7 @@ public class LocationActivity extends ActionBarActivity {
             public void onLocationChanged(Location location) {
                 // Called when a new location is found by the network location provider.
                 Log.i("LOCATION SERVICES", location.toString());
+                mLocationLog.addLocation(location);
             }
 
             public void onStatusChanged(String provider, int status, Bundle extras) {}
