@@ -24,6 +24,7 @@ public class LocationActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location);
 
+
         mLocationLog = new LocationLog();
 
         mButton = (Button) findViewById(R.id.map_button);

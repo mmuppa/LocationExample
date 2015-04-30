@@ -1,8 +1,8 @@
 package edu.uw.tacoma.mmuppa.locationexample;
 
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -27,21 +27,12 @@ public class MapActivity extends ActionBarActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_map);
 
-        mLocationLog = (LocationLog) getIntent().getSerializableExtra("locations");
-        Log.i("Map Activity", Integer.toString(mLocationLog.getLatitudes().size()));
-        if (mLocationLog != null) {
-            List<Double> latitudes = mLocationLog.getLatitudes();
-            List<Double> longitudes = mLocationLog.getLongitudes();
-
+        mLocationLog = (LocationLog) getIntent().getParcelableExtra("locations");
 
             MapFragment mapFragment = (MapFragment) getFragmentManager()
                     .findFragmentById(R.id.map);
             mGoogleMap = mapFragment.getMap();
             mapFragment.getMapAsync(this);
-
-
-        }
-
     }
 
 
@@ -62,14 +53,15 @@ public class MapActivity extends ActionBarActivity implements OnMapReadyCallback
         // Seattle coordinates - 47.6097, -122.3331
 
         if (mLocationLog != null) {
-            List<Double> latitudes = mLocationLog.getLatitudes();
-            List<Double> longitudes = mLocationLog.getLongitudes();
-            LatLng firstLatLng = new LatLng(latitudes.get(0), longitudes.get(0));
-            for (int i=0; i<latitudes.size(); i++) {
-                Marker marker = mGoogleMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(latitudes.get(i), longitudes.get(i)))
-                        .title("My Locations"));
 
+            List<Location> locations = mLocationLog.getLocationList();
+            Location location = locations.get(0);
+            LatLng firstLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+            for (int i=0; i<locations.size(); i++) {
+                Marker marker = mGoogleMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(locations.get(i).getLatitude()
+                                , locations.get(i).getLongitude()))
+                        .title("My Locations"));
             }
             mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(firstLatLng, 15));
         }
